@@ -29,9 +29,10 @@ ALLOWED_HOSTS = []
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 AWS_STORAGE_BUCKET_NAME = ''
+AWS_ACL_POLICY = 'private'
 BOTO_S3_HOST = ''
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 
 # Application definition
@@ -44,7 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'proxy',
-    'storages',
+#    'storages',
 )
 
 MIDDLEWARE_CLASSES = (
