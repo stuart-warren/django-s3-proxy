@@ -34,7 +34,7 @@ class S3Object(models.Model):
 
     def save(self, *args, **kwargs):
         self.fileObj = ContentFile(self.content)
-        size = upload(self.fileObj,
+        upload(self.fileObj,
                        name=self.key,
                        bucket_name=self.bucket.name,
                        key=settings.AWS_ACCESS_KEY_ID,
@@ -43,9 +43,7 @@ class S3Object(models.Model):
                        expires=10,
                        query_auth=True,
                        replace=self.bucket.allow_file_replace)
-        print size
-        if size > 0:
-            super(S3Object, self).save(*args, **kwargs)
+        super(S3Object, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         remove(name=self.key,
