@@ -4,7 +4,7 @@ from proxy.models import Bucket, S3Object
 
 
 class BucketAdmin(admin.ModelAdmin):
-    list_display = ('name', 'owner', 'put_once', 'comment', 'last_updated')
+    list_display = ('name', 'owner', 'allow_file_replace', 'comment', 'last_updated')
     list_filter = ['owner']
     search_fields = ['name', 'comment']
 

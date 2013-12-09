@@ -17,7 +17,7 @@ class Bucket(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
     owner = models.CharField(max_length=100)
     comment = models.CharField(max_length=500, blank=True)
-    put_once = models.BooleanField(default=False)
+    allow_file_replace = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.name
@@ -34,15 +34,18 @@ class S3Object(models.Model):
 
     def save(self, *args, **kwargs):
         self.fileObj = ContentFile(self.content)
-        upload(self.fileObj,
-                 name=self.key,
-                 bucket_name=self.bucket.name,
-                 key=settings.AWS_ACCESS_KEY_ID,
-                 secret=settings.AWS_SECRET_ACCESS_KEY,
-                 host=settings.BOTO_S3_HOST,
-                 expires=0,
-                 query_auth=True)
-        super(S3Object, self).save(*args, **kwargs)
+        size = upload(self.fileObj,
+                       name=self.key,
+                       bucket_name=self.bucket.name,
+                       key=settings.AWS_ACCESS_KEY_ID,
+                       secret=settings.AWS_SECRET_ACCESS_KEY,
+                       host=settings.BOTO_S3_HOST,
+                       expires=10,
+                       query_auth=True,
+                       replace=self.bucket.allow_file_replace)
+        print size
+        if size > 0:
+            super(S3Object, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         remove(name=self.key,
@@ -58,4 +61,5 @@ class S3Object(models.Model):
                        key=settings.AWS_ACCESS_KEY_ID,
                        secret=settings.AWS_SECRET_ACCESS_KEY,
                        host=settings.BOTO_S3_HOST,
-                       query_auth=True)
+                       query_auth=True,
+                       expires=10)

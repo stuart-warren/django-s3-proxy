@@ -19,6 +19,7 @@ def get(request, bucket_name, key):
                    key=settings.AWS_ACCESS_KEY_ID,
                    secret=settings.AWS_SECRET_ACCESS_KEY,
                    host=settings.BOTO_S3_HOST,
-                   query_auth=True)
+                   query_auth=True,
+                   expires=10)
     # return render(request, 'proxy/test.html', {'bucket': bucket, 'request': request, 'key': key, 'url': url})
     return http.HttpResponseRedirect(url)
